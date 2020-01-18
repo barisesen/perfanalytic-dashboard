@@ -24,7 +24,7 @@ export default class Charts extends Component {
   dateRangeOnChange = async (data) => {
     console.log(data)
     try {
-      const metrics = await fetch(`http://localhost:3000/metrics?start_date=${dayjs(data.start).format('YYYY-MM-DD HH:mm:ss')}&end_date=${data.end}`).then(res => res.json());
+      const metrics = await fetch(`http://localhost:3000/metrics?start_date=${dayjs(data.start).valueOf()}&end_date=${dayjs(data.end).valueOf()}`).then(res => res.json());
       this.setState({ metrics })  
     } catch(err) {
       console.log(err)
