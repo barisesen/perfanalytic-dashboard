@@ -15,13 +15,16 @@ constructor(props) {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return { 
-      id: props.id,
-      name: props.name,
-      series: props.series,
-      dates: props.dates,
-      type: props.type
+    if (state.series !== props.series) {
+      return { 
+        id: props.id,
+        name: props.name,
+        series: props.series,
+        dates: props.dates,
+        type: props.type
+      }
     }
+    return state;
   }
 
   getOptions() {
