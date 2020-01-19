@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import ChartCustom from "./ChartCustom";
 import DatetimeRangePicker from 'react-datetime-range-picker';
 import dayjs from 'dayjs';
@@ -8,7 +8,7 @@ export default class Charts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        metrics: [],
+        metrics: null,
         startDate: dayjs().subtract(30, 'minute').toString(),
         endDate: dayjs().toString(),
     };
@@ -18,21 +18,38 @@ export default class Charts extends Component {
 
   async componentDidMount() {
     const metrics = await fetch(`http://localhost:3000/metrics`).then(res => res.json());
-    this.setState({ metrics })          
+    
+    const data = {};
+    metrics.map(metric => {
+      Object.keys(metric).map(key => {
+        data[key] = [...(data[key] || []), metric[key]]
+      })
+    })
+    this.setState({ metrics: data })       
   }
 
-  dateRangeOnChange = async (data) => {
-    console.log(data)
+  dateRangeOnChange = async ({start, end}) => {
     try {
-      const metrics = await fetch(`http://localhost:3000/metrics?start_date=${dayjs(data.start).valueOf()}&end_date=${dayjs(data.end).valueOf()}`).then(res => res.json());
-      this.setState({ metrics })  
+      const metrics = await fetch(`http://localhost:3000/metrics?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`).then(res => res.json());
+      const data = {};
+      metrics.map(metric => {
+        Object.keys(metric).map(key => {
+          data[key] = [...(data[key] || []), metric[key]]
+        })
+      })
+      this.setState({ metrics: data })   
     } catch(err) {
       console.log(err)
     }
   }
 
+  // fetc data.
+  // url ler env ye taşınacak.
+
   render () {
-    if (this.state.metrics.length > 0) {
+    if (this.state.metrics !== null) {
+      const {ttfb, fcp, dom_load, window_load, created_at} = this.state.metrics;
+
       return (
       <div>
         <Row style={{display: 'flex',justifyContent: 'flex-end', padding: '15px'}}>
@@ -49,8 +66,8 @@ export default class Charts extends Component {
           <Col lg={6} md={12}>
             <ChartCustom
               name="TTFB"
-              series={this.state.metrics.map(metric => metric.ttfb)}
-              dates={this.state.metrics.map(metric => metric.created_at)}
+              series={ttfb || []}
+              dates={created_at}
               type="line"
               id="ttfb"
             />
@@ -58,8 +75,8 @@ export default class Charts extends Component {
           <Col lg={6} md={12}>
             <ChartCustom
               name="FCP"
-              series={this.state.metrics.map(metric => metric.fcp)}
-              dates={this.state.metrics.map(metric => metric.created_at)}
+              series={fcp}
+              dates={created_at}
               type="line"
               id="fcp"
             />
@@ -67,8 +84,8 @@ export default class Charts extends Component {
           <Col lg={6} md={12}>
             <ChartCustom
               name="Dom Load"
-              series={this.state.metrics.map(metric => metric.dom_load)}
-              dates={this.state.metrics.map(metric => metric.created_at)}
+              series={dom_load}
+              dates={created_at}
               type="line"
               id="dom_load"
             />
@@ -76,8 +93,8 @@ export default class Charts extends Component {
           <Col lg={6} md={12}>
             <ChartCustom
               name="Window Load"
-              series={this.state.metrics.map(metric => metric.window_load)}
-              dates={this.state.metrics.map(metric => metric.created_at)}
+              series={window_load}
+              dates={created_at}
               type="line"
               id="window_load"
             />

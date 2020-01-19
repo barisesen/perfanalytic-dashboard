@@ -1,37 +1,42 @@
 import React, { Component } from 'react';
 import Chart from "react-apexcharts";
 
+// X labels silenecek.
 export default class ChartCustom extends Component {
 constructor(props) {
     super(props);
 
+    const { id, name, series, dates, type } = props;
     this.state = {
-      id: props.id,
-      name: props.name,
-      series: props.series,
-      dates: props.dates,
-      type: props.type || 'line'
+      id,
+      name,
+      series,
+      dates,
+      type: type || 'line',
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (state.series !== props.series) {
+    const { id, name, series, dates, type } = props;
+
+    if (state.series !== series && Array.isArray(series) && Array.isArray(dates)) {
       return { 
-        id: props.id,
-        name: props.name,
-        series: props.series,
-        dates: props.dates,
-        type: props.type
+        id,
+        name,
+        series,
+        dates,
+        type: type || 'line',
       }
     }
     return state;
   }
 
   getOptions() {
+    const { id, name: text, dates } = this.state;
     return {
         colors: ['#'+(Math.random()*0xFFFFFF<<0).toString(16)],
         title: {
-          text: this.state.name,
+          text,
           align: 'left',
           margin: 10,
           offsetX: 0,
@@ -43,19 +48,20 @@ constructor(props) {
           },
       },
       chart: {
-        id: `custom-chart-${this.state.id}`,
+        id: `custom-chart-${id}`,
       },
       xaxis: {
-        categories: this.state.dates,
+        categories: dates, // Okunaklı tarih, 5 dakika önce vb.
       }
     };
   }
 
   getSeries() {
-    return  [
+    const { name, series: data } = this.state;
+    return [
         {
-          name: this.state.name,
-          data: this.state.series
+          name,
+          data
         }
       ];
   }
