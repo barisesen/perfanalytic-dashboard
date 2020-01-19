@@ -4,6 +4,8 @@ import ChartCustom from "./ChartCustom";
 import DatetimeRangePicker from 'react-datetime-range-picker';
 import dayjs from 'dayjs';
 
+const BASE_API_URL = 'https://perfanalytic-dashboard.herokuapp.com';
+
 export default class Charts extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +19,7 @@ export default class Charts extends Component {
   }
 
   async componentDidMount() {
-    const metrics = await fetch(`http://localhost:3000/metrics`).then(res => res.json());
+    const metrics = await fetch(`${BASE_API_URL}/metrics`).then(res => res.json());
     
     const data = {};
     metrics.map(metric => {
@@ -30,7 +32,7 @@ export default class Charts extends Component {
 
   dateRangeOnChange = async ({start, end}) => {
     try {
-      const metrics = await fetch(`http://localhost:3000/metrics?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`).then(res => res.json());
+      const metrics = await fetch(`${BASE_API_URL}/metrics?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`).then(res => res.json());
       const data = {};
       metrics.map(metric => {
         Object.keys(metric).map(key => {
