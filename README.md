@@ -6,7 +6,7 @@ The application takes performance data from the browser and processes it. It sho
 
 Demo: https://perfanalytic-dashboard.herokuapp.com/
 
-API: [api](https://github.com/barisesen/perfanalytic-api)
+API: https://github.com/barisesen/perfanalytic-api
 
 # Installation
 ```
