@@ -18,21 +18,15 @@ export default class Charts extends Component {
     this.dateRangeOnChange = this.dateRangeOnChange.bind(this)
   }
 
-  async componentDidMount() {
-    const metrics = await fetch(`${BASE_API_URL}/metrics`).then(res => res.json());
-    
-    const data = {};
-    metrics.map(metric => {
-      Object.keys(metric).map(key => {
-        data[key] = [...(data[key] || []), metric[key]]
-      })
-    })
-    this.setState({ metrics: data })       
-  }
-
-  dateRangeOnChange = async ({start, end}) => {
+  
+  async getData(start = false, end = false) {
     try {
-      const metrics = await fetch(`${BASE_API_URL}/metrics?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`).then(res => res.json());
+      let url = `${BASE_API_URL}/metrics`;
+
+      if (start && end) {
+        url += `?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`;
+      }
+      const metrics = await fetch(url);
       const data = {};
       metrics.map(metric => {
         Object.keys(metric).map(key => {
@@ -45,8 +39,13 @@ export default class Charts extends Component {
     }
   }
 
-  // fetc data.
-  // url ler env ye taşınacak.
+  componentDidMount() {
+    this.getData();    
+  }
+
+  dateRangeOnChange = async ({start, end}) => {
+    this.getData(start, end);
+  }
 
   render () {
     if (this.state.metrics !== null) {
