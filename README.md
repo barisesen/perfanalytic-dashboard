@@ -4,6 +4,8 @@
 
 The application takes performance data from the browser and processes it. It shows the data it processes in the management panel.
 
+![](https://github.com/barisesen/perfanalytic-api/raw/master/doc/logo.png)
+
 Demo: https://perfanalytic-dashboard.herokuapp.com/
 
 API: https://github.com/barisesen/perfanalytic-api
