@@ -4,7 +4,7 @@ import ChartCustom from "./ChartCustom";
 import DatetimeRangePicker from 'react-datetime-range-picker';
 import dayjs from 'dayjs';
 
-const BASE_API_URL = process.env.BASE_API_URL || 'https://perfanalytic-dashboard.herokuapp.com';
+const BASE_API_URL = process.env.BASE_API_URL || 'https://perfanalytic.herokuapp.com';
 
 export default class Charts extends Component {
   constructor(props) {
