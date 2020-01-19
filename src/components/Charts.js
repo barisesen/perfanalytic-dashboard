@@ -20,23 +20,19 @@ export default class Charts extends Component {
 
   
   async getData(start = false, end = false) {
-    try {
-      let url = `${BASE_API_URL}/metrics`;
+    let url = `${BASE_API_URL}/metrics`;
 
-      if (start && end) {
-        url += `?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`;
-      }
-      const metrics = await fetch(url);
-      const data = {};
-      metrics.map(metric => {
-        Object.keys(metric).map(key => {
-          data[key] = [...(data[key] || []), metric[key]]
-        })
-      })
-      this.setState({ metrics: data })   
-    } catch(err) {
-      console.log(err)
+    if (start && end) {
+      url += `?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`;
     }
+    const metrics = await fetch(url);
+    const data = {};
+    metrics.map(metric => {
+      Object.keys(metric).map(key => {
+        data[key] = [...(data[key] || []), metric[key]]
+      })
+    })
+    this.setState({ metrics: data })   
   }
 
   componentDidMount() {
