@@ -6,8 +6,6 @@ The application takes performance data from the browser and processes it. It sho
 
 Demo: https://perfanalytic-dashboard.herokuapp.com/
 
-Client application that sends to API using performance api: [client]()
-
 API: [api](https://github.com/barisesen/perfanalytic-api)
 
 # Installation
