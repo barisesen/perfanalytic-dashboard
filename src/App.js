@@ -4,6 +4,10 @@ import Charts from "./components/Charts";
 import './App.css';
 
 class App extends Component {
+  componentDidMount() {
+    document.title = "PerfAnalytic";
+  }
+
   render () {
     return (
       <Container fluid>

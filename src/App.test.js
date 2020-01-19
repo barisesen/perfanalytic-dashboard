@@ -8,5 +8,3 @@ test('renders learn react link', () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-// Fetc data için test, 
-// chart ı çağırıcaz.

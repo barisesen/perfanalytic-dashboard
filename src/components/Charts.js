@@ -18,35 +18,42 @@ export default class Charts extends Component {
     this.dateRangeOnChange = this.dateRangeOnChange.bind(this)
   }
 
-  
-  async getData(start = false, end = false) {
-    let url = `${BASE_API_URL}/metrics`;
-
-    if (start && end) {
-      url += `?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`;
+  async componentDidMount() {
+    let metrics = await fetch(`${BASE_API_URL}/metrics`).then(res => res.json());
+    if (metrics.length === 0) {
+      let metrics = await fetch(`${BASE_API_URL}/metrics?start_date=${dayjs().subtract(5, 'day').valueOf()}&end_date=${dayjs().valueOf()}`).then(res => res.json());
     }
-    const metrics = await fetch(url);
     const data = {};
     metrics.map(metric => {
       Object.keys(metric).map(key => {
         data[key] = [...(data[key] || []), metric[key]]
       })
     })
-    this.setState({ metrics: data })   
-  }
-
-  componentDidMount() {
-    this.getData();    
+    this.setState({ metrics: data })       
   }
 
   dateRangeOnChange = async ({start, end}) => {
-    this.getData(start, end);
+    try {
+      const metrics = await fetch(`${BASE_API_URL}/metrics?start_date=${dayjs(start).valueOf()}&end_date=${dayjs(end).valueOf()}`).then(res => res.json());
+      const data = {};
+      metrics.map(metric => {
+        Object.keys(metric).map(key => {
+          data[key] = [...(data[key] || []), metric[key]]
+        })
+      })
+      this.setState({ metrics: data })   
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   render () {
     if (this.state.metrics !== null) {
-      const {ttfb, fcp, dom_load, window_load, created_at} = this.state.metrics;
-
+      const {ttfb, fcp, dom_load, window_load} = this.state.metrics;
+      let { created_at } = this.state.metrics;
+      if (created_at && created_at.length > 0) {
+        created_at = created_at.map(x => dayjs(x).format())
+      }
       return (
       <div>
         <Row style={{display: 'flex',justifyContent: 'flex-end', padding: '15px'}}>
