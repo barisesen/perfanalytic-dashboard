@@ -70,7 +70,7 @@ export default class Charts extends Component {
           <Col lg={6} md={12}>
             <ChartCustom
               name="TTFB"
-              series={ttfb || []}
+              series={ttfb}
               dates={created_at}
               type="line"
               id="ttfb"
